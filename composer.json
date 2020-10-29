@@ -1,0 +1,27 @@
+{
+    "name": "iamxcd/laravel-crud",
+    "type": "library",
+    "authors": [
+        {
+            "name": "x",
+            "email": "songbai_x@qq.com"
+        }
+    ],
+    "require": {
+        "php": "^7.0",
+        "laravel/framework": "^5.5 || ^6.0 || ^7.0 || ^8.0"
+    },
+    "license": "mit",
+    "autoload": {
+        "psr-4": {
+            "Iamxcd\\LaravelCRUD\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Iamxcd\\LaravelCRUD\\LaravelCRUDServiceProvider"
+            ]
+        }
+    }
+}

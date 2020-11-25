@@ -11,16 +11,16 @@ trait HasOption
 {
     protected $optionValue = 'id';
 
-    protected $optionLable = 'name';
+    protected $optionLabel = 'name';
 
 
     public function option(Request $request)
     {
         $model = $this->model::query();
         if ($request->has('key')) {
-            $model->where($this->optionLable, 'like', '%' . $request->key . '%');
+            $model->where($this->optionLabel, 'like', '%' . $request->key . '%');
         }
-        $data = $model->get([$this->optionValue . ' as value', $this->optionLable . ' as lable'])->toArray();
+        $data = $model->get([$this->optionValue . ' as value', $this->optionLabel . ' as label'])->toArray();
         return $this->response($data, '获取成功');
     }
 }

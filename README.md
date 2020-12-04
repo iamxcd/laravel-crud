@@ -1,5 +1,8 @@
 
 
+## 安装
+    composer require iamxcd/laravel-crud
+    
 ## 筛选器 语法
 
 - [x]  "cs": contain string (包含字符串)

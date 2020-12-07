@@ -34,3 +34,10 @@
 
 ## 注意
     所有需要排序的字段和筛选需要后端添加白名单.
+
+
+## 中间件
+    ForceJson.php
+
+## 表单验证失败
+    HasOverrideFailedValidation.php

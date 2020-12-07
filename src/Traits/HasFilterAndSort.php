@@ -35,6 +35,10 @@ trait HasFilterAndSort
         }
 
         $params = $request->only($this->filterableFields);
+        // 过滤空值
+        $params = array_filter($params, function ($val) {
+            return !is_null($val);
+        });
 
         if (count($params) == 0) {
             return $model;
@@ -86,6 +90,12 @@ trait HasFilterAndSort
      */
     private function eq($key, $val, $model)
     {
+        /**
+         * 特殊情况处理
+         */
+        if ($val === 'true') $val = true;
+        if ($val === 'false') $val = false;
+
         return $model->where($key, $val);
     }
 }

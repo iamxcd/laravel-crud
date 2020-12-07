@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Response;
 trait HasResponse
 {
 
-    public function response($data, $message = '', $code = 200, $headers = [])
+    public function response($data, $message = '', $code = 0, $headers = [])
     {
 
         $re_data = [
@@ -24,7 +24,7 @@ trait HasResponse
     {
 
         $re_data = [
-            'code' => 200,
+            'code' => 0,
             'message' => '获取成功',
             'data' => $data,
             'paginate' => [
@@ -36,13 +36,13 @@ trait HasResponse
         return Response::json($re_data, 200);
     }
 
-    public function responseMessage($message = '', $code = 200)
+    public function responseMessage($message = '', $code = 0)
     {
-        return $this->response([], $message, $code);
+        return $this->response(null, $message, $code);
     }
 
-    public function responseError($message = '', $code = 400)
+    public function responseError($message = '', $code = 1)
     {
-        return $this->response([], $message, $code);
+        return $this->response(null, $message, $code);
     }
 }

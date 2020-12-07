@@ -2,18 +2,22 @@
 
 namespace Iamxcd\LaravelCRUD\Traits;
 
-use Illuminate\Http\Request;
-
 trait HasCrud
 {
-    use HasResponse;
+    use HasResponse, HasFilterAndSort;
     protected $model;
     protected $request;
+
+    /**
+     * 筛选器
+     */
+    protected $filters;
 
     public function index()
     {
         $request = app($this->request);
-        $data = $this->model->paginate((int) $request->page_size ?? 15)->toArray();
+        $data = $this->filterAndSort($this->model, $request)->paginate((int) $request->page_size ?? 15)->toArray();
+
         return $this->responsePaginate($data['data'], $data['total'], $data['current_page'], $data['per_page']);
     }
 
@@ -27,11 +31,7 @@ trait HasCrud
 
     public function show($id)
     {
-        $data =  $this->model::find($id);
-        if (is_null($data)) {
-            return $this->responseError('记录不存在', 404);
-        }
-
+        $data =  $this->model::findOrFail($id);
         return $this->response($data, '获取成功');
     }
 
@@ -39,11 +39,7 @@ trait HasCrud
     {
         $request = app($this->request);
         $data = $request->validated();
-        $model = $this->model::find($id);
-        if (is_null($model)) {
-            return $this->responseError('记录不存在', 404);
-        }
-
+        $model = $this->model::findOrFail($id);
         $model->update($data);
 
         return $this->responseMessage('更新成功');
@@ -51,12 +47,7 @@ trait HasCrud
 
     public function destroy($id)
     {
-
-        $model = $this->model::find($id);
-        if (is_null($model)) {
-            return $this->responseError('记录不存在', 404);
-        }
-
+        $model = $this->model::findOrFail($id);
         $model::destroy($id);
         return $this->responseMessage('删除成功');
     }

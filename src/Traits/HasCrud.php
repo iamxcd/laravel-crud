@@ -5,7 +5,14 @@ namespace Iamxcd\LaravelCRUD\Traits;
 trait HasCrud
 {
     use HasResponse, HasFilterAndSort;
+    /**
+     * @var \Illuminate\Database\Eloquent\Model
+     */
     protected $model;
+
+    /**
+     * @var \Illuminate\Foundation\Http\FormRequest
+     */
     protected $request;
 
     /**
@@ -15,7 +22,7 @@ trait HasCrud
 
     public function index()
     {
-        $request = app($this->request);
+        $request = $this->request;
         $data = $this->filterAndSort($this->model, $request)->paginate((int) $request->page_size ?? 15)->toArray();
 
         return $this->responsePaginate($data['data'], $data['total'], $data['current_page'], $data['per_page']);
@@ -23,7 +30,7 @@ trait HasCrud
 
     public function store()
     {
-        $request = app($this->request);
+        $request = $this->request;
         $data = $request->validated();
         $this->model->create($data);
         return $this->responseMessage('创建成功');
@@ -37,7 +44,7 @@ trait HasCrud
 
     public function update($id)
     {
-        $request = app($this->request);
+        $request = $this->request;
         $data = $request->validated();
         $model = $this->model::findOrFail($id);
         $model->update($data);

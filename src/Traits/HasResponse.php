@@ -27,7 +27,7 @@ trait HasResponse
             'code' => 0,
             'message' => '获取成功',
             'data' => $data,
-            'paginate' => [
+            'pagination' => [
                 'page' => $page,
                 'page_size' => $page_size,
                 'total' => $total,

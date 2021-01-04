@@ -15,7 +15,9 @@ trait HasFilterAndSort
     /**
      * 过滤器关键字
      */
-    private $filtersKeyword = ['cs', 'eq'];
+    private $filtersKeyword = [
+        'like', '=', '<', '<=', '>', '>=',
+    ];
 
     /**
      * 排序关键字
@@ -50,11 +52,11 @@ trait HasFilterAndSort
         foreach ($params as $key => $val) {
             $kw = explode(',', $val);
             if (!in_array($kw[0], $this->filtersKeyword)) {
-                $model = $this->eq($key, $val, $model);
+                $model = $this->general($key, '=', $val, $model);
                 continue;
             }
 
-            $model =  $this->{$kw[0]}($key, $kw, $model);
+            $model =  $this->general($key, $kw[0], $kw, $model);
         }
 
         /**
@@ -71,31 +73,12 @@ trait HasFilterAndSort
         return $model;
     }
 
-    /**
-     * contain string (包含字符串)
-     * 
-     */
-    private function cs($key, $kw, $model)
+    private function general($key, $operation, $kw, $model)
     {
-        /**
-         * 将后面多解析的参数合并
-         */
-        array_shift($kw);
-        $val = implode(',', $kw);
-        return $model->where($key, 'like', '%' . $val . '%');
-    }
+        if ($operation == 'like') {
+            return  $model->where($key, $operation, '%' . $kw[1] . '%');
+        }
 
-    /**
-     * equal (字符串或者数字完全匹配  可以省略)
-     */
-    private function eq($key, $val, $model)
-    {
-        /**
-         * 特殊情况处理
-         */
-        if ($val === 'true') $val = true;
-        if ($val === 'false') $val = false;
-
-        return $model->where($key, $val);
+        return  $model->where($key, $operation, $kw);
     }
 }

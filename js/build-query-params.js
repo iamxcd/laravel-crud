@@ -8,6 +8,9 @@ import _ from 'lodash'
 export default (params, rules) => {
     let obj = {}
     for (const key in params) {
+        if (params[key] === '' || params[key] === null) {
+            continue
+        }
         if (!_.has(rules, key)) {
             obj[key] = params[key]
             continue
@@ -22,6 +25,9 @@ export default (params, rules) => {
             case 'boolean':
                 obj[key] = general(params[key], rules[key])
                 break;
+            case 'between-date':
+                obj[key] = betweenDate(params[key], rules[key])
+                break;
 
             default:
                 obj[key] = params[key]
@@ -34,4 +40,8 @@ export default (params, rules) => {
 
 function general(params, operation) {
     return `${operation},${params}`
+}
+
+function betweenDate(dates, operation) {
+    return `${operation},${dates[0]},${dates[1]}`
 }

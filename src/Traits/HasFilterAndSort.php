@@ -17,6 +17,8 @@ trait HasFilterAndSort
      */
     private $filtersKeyword = [
         'like', '=', '<', '<=', '>', '>=',
+        'between-date',
+        'boolean', // laravel 布尔值在数据库中是存的1和0 ,这里转化一下
     ];
 
     /**
@@ -76,7 +78,16 @@ trait HasFilterAndSort
     private function general($key, $operation, $kw, $model)
     {
         if ($operation == 'like') {
-            return  $model->where($key, $operation, '%' . $kw[1] . '%');
+            return $model->where($key, $operation, '%' . $kw[1] . '%');
+        }
+
+        if ($operation == 'between-date') {
+            // TODO 日期格式待验证 后期通过抛出异常处理
+            return $model->whereDate($key, '>=', $kw[1])->whereDate($key, '<=', $kw[2]);
+        }
+
+        if ($operation == 'boolean') {
+            return  $model->where($key, $kw[1] == 'true' ? 1 : 0);
         }
 
         return  $model->where($key, $operation, $kw);

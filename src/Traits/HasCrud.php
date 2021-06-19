@@ -23,7 +23,7 @@ trait HasCrud
     public function index()
     {
         $request = $this->request;
-        $data = $this->filterAndSort($this->model, $request)->paginate((int) $request->page_size ?? 15)->toArray();
+        $data = $this->filterAndSort($this->model, $request)->latest("id")->paginate((int) $request->page_size ?? 15)->toArray();
 
         return $this->responsePaginate($data['data'], $data['total'], $data['current_page'], $data['per_page']);
     }

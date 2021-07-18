@@ -2,6 +2,7 @@
 
 namespace Iamxcd\LaravelCRUD\Traits;
 
+use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 
@@ -82,8 +83,10 @@ trait HasFilterAndSort
         }
 
         if ($operation == 'between-date') {
-            // TODO 日期格式待验证 后期通过抛出异常处理
-            return $model->whereDate($key, '>=', $kw[1])->whereDate($key, '<=', $kw[2]);
+            if (!strtotime($kw[1])  || !strtotime($kw[1])) {
+                throw new Exception("格式错误");
+            }
+            return $model->whereBetween($key, [$kw[1], $kw[2]]);
         }
 
         if ($operation == 'boolean') {
